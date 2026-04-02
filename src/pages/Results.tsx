@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { categoryLabels, categoryEmoji, type Category } from "@/lib/questions";
 import type { AssessmentResult } from "@/lib/scoring";
-import { RotateCcw, BookOpen, Share2, Wind, History } from "lucide-react";
+import { RotateCcw, BookOpen, Share2, Wind, History, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import FloatingElements from "@/components/FloatingElements";
 import { saveResult } from "@/lib/history";
@@ -35,12 +35,36 @@ const Results = () => {
   };
 
   const handleShare = async () => {
-    const text = `Upravo sam proverio/la svoje mentalno blagostanje na SoulSync! Moj status: ${results.statusEmoji} ${results.statusLabel}. Vodite računa o svom mentalnom zdravlju! 💚`;
+    const url = "https://soulsync.net/";
+    const text = `Upravo sam proverio/la svoje mentalno blagostanje na SoulSync! Moj status: ${results.statusEmoji} ${results.statusLabel}. Uradi i ti procenu: ${url}`;
+    const shareData = {
+      title: "SoulSync — Moj rezime mentalnog blagostanja",
+      text,
+      url,
+    };
     try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Rezime je kopiran u klipbord!");
+      if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
+        await navigator.share(shareData);
+        toast.success("Rezime je uspešno podeljen.");
+        return;
+      }
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      toast.success("Rezime je kopiran u klipbord.");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+      toast.error("Deljenje trenutno nije moguće. Pokušajte ponovo.");
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const url = "https://soulsync.net/";
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link je kopiran u klipbord.");
     } catch {
-      toast.error("Nije moguće kopirati. Pokušajte ponovo.");
+      toast.error("Kopiranje linka trenutno nije moguće.");
     }
   };
 
@@ -145,6 +169,14 @@ const Results = () => {
           >
             <Share2 className="w-4 h-4 mr-2" />
             Podeli rezime
+          </Button>
+          <Button
+            onClick={handleCopyLink}
+            variant="outline"
+            className="rounded-full py-6 font-semibold tracking-wide border-2 hover:shadow-md transition-all duration-300"
+          >
+            <Link2 className="w-4 h-4 mr-2" />
+            Copy link
           </Button>
           <Button
             onClick={() => navigate(routes.istorija)}
