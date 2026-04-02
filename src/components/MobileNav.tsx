@@ -38,18 +38,30 @@ const MobileNav = () => {
       />
 
       <nav
-        className={`hidden md:block fixed top-0 right-0 z-[80] h-full w-72 bg-background/95 backdrop-blur-xl shadow-2xl transition-transform duration-400 ease-out ${
+        className={`hidden md:block fixed top-0 right-0 z-[80] h-full w-80 bg-background/95 backdrop-blur-xl shadow-2xl transition-transform duration-400 ease-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-border/50">
-          <span className="font-heading font-bold text-lg text-foreground">SoulSync</span>
+        <div className="px-6 pt-5 pb-4 border-b border-border/50 bg-gradient-to-r from-secondary/15 via-background to-primary/15">
+          <div className="flex items-center justify-between">
+            <span className="font-heading font-bold text-lg text-foreground">SoulSync</span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-9 h-9 rounded-xl hover:bg-muted flex items-center justify-center transition-colors"
+              aria-label="Zatvori meni"
+            >
+              <X className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground mt-2">Brza navigacija kroz sadržaj i alate za smirenje.</p>
+        </div>
+        <div className="px-4 pt-4">
           <button
-            onClick={() => setIsOpen(false)}
-            className="w-9 h-9 rounded-xl hover:bg-muted flex items-center justify-center transition-colors"
-            aria-label="Zatvori meni"
+            onClick={() => handleNavigate(routes.upitnik)}
+            className="w-full rounded-2xl px-4 py-3 text-left bg-gradient-to-r from-primary/20 via-secondary/15 to-accent/30 border border-border/50 hover:shadow-md transition-all duration-200"
           >
-            <X className="w-5 h-5 text-muted-foreground" />
+            <p className="text-sm font-semibold text-foreground">Pokreni procenu odmah</p>
+            <p className="text-xs text-muted-foreground mt-1">20 pitanja · oko 3 minuta</p>
           </button>
         </div>
         <div className="px-4 py-6 space-y-1.5">
@@ -73,6 +85,9 @@ const MobileNav = () => {
               </button>
             );
           })}
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t border-border/50 bg-background/90">
+          <p className="text-xs text-center text-muted-foreground/70">🔒 Privatno · Bez registracije · Besplatno</p>
         </div>
       </nav>
 

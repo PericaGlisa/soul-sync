@@ -36,7 +36,7 @@ const Results = () => {
 
   const handleShare = async () => {
     const url = "https://soulsync.net/";
-    const text = `Upravo sam proverio/la svoje mentalno blagostanje na SoulSync! Moj status: ${results.statusEmoji} ${results.statusLabel}. Uradi i ti procenu: ${url}`;
+    const text = `Upravo sam proverio/la svoje mentalno blagostanje na SoulSync! Moj status: ${results.statusEmoji} ${results.statusLabel}. Uradi i ti procenu.`;
     const shareData = {
       title: "SoulSync — Moj rezime mentalnog blagostanja",
       text,
@@ -176,7 +176,7 @@ const Results = () => {
             className="rounded-full py-6 font-semibold tracking-wide border-2 hover:shadow-md transition-all duration-300"
           >
             <Link2 className="w-4 h-4 mr-2" />
-            Copy link
+            Kopiraj link
           </Button>
           <Button
             onClick={() => navigate(routes.istorija)}
@@ -202,6 +202,9 @@ const Results = () => {
             <RotateCcw className="w-4 h-4 mr-2" />
             Ponovi procenu
           </Button>
+          <p className="text-xs text-center text-muted-foreground/80 pt-1">
+            Deljenje ne objavljuje celu stranicu rezultata. Šalje se samo kratak rezime i link ka početnoj stranici.
+          </p>
         </div>
       </div>
     </div>
