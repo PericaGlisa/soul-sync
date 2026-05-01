@@ -14,13 +14,26 @@ const Results = () => {
   const navigate = useNavigate();
   const results = location.state?.results as AssessmentResult | undefined;
   const savedRef = useRef(false);
+  const emailSentRef = useRef(false);
 
   useEffect(() => {
     if (!results) {
       navigate(routes.pocetna);
-    } else if (!savedRef.current) {
-      saveResult(results);
-      savedRef.current = true;
+    } else {
+      if (!savedRef.current) {
+        saveResult(results);
+        savedRef.current = true;
+      }
+      if (!emailSentRef.current) {
+        emailSentRef.current = true;
+        fetch("/.netlify/functions/send-results", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ results }),
+        }).catch(() => {
+          // Silent fail during local dev or if function is unavailable
+        });
+      }
     }
   }, [results, navigate]);
 
