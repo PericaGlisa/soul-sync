@@ -73,13 +73,13 @@ export default async (request, context) => {
             <tr style="background:#f3f4f6;text-align:left;">
               <th style="padding:8px 12px;border-bottom:2px solid #e5e7eb;">Kategorija</th>
               <th style="padding:8px 12px;border-bottom:2px solid #e5e7eb;">Skor (%)</th>
-              <th style="padding:8px 12px;border-bottom:2px solid #e5e7eb;">Sirovi skor</th>
+              <th style="padding:8px 12px;border-bottom:2px solid #e5e7eb;">Rezultat (poeni)</th>
             </tr>
           </thead>
           <tbody>${categoryRows}</tbody>
         </table>
 
-        <h2 style="font-size:16px;margin-top:24px;margin-bottom:10px;">Insight</h2>
+        <h2 style="font-size:16px;margin-top:24px;margin-bottom:10px;">Procena stanja</h2>
         <p style="background:#f9fafb;padding:14px;border-radius:8px;font-size:14px;line-height:1.6;">${results.insight}</p>
 
         <h2 style="font-size:16px;margin-top:24px;margin-bottom:10px;">Preporuke</h2>
