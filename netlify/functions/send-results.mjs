@@ -94,6 +94,16 @@ export default async (request, context) => {
     </div>
   `;
 
+  const emailPayload = {
+    from: FROM_EMAIL,
+    to: ADMIN_EMAIL,
+    subject: `Novi rezultati upitnika — ${results.statusLabel} (${results.totalScore}/100)`,
+    html,
+  };
+
+  console.log("[send-results] Sending email to Resend:");
+  console.log("[send-results] Payload:", JSON.stringify(emailPayload, null, 2));
+
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -101,28 +111,29 @@ export default async (request, context) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: ADMIN_EMAIL,
-        subject: `Novi rezultati upitnika — ${results.statusLabel} (${results.totalScore}/100)`,
-        html,
-      }),
+      body: JSON.stringify(emailPayload),
     });
 
     const data = await res.json().catch(() => ({}));
 
+    console.log("[send-results] Resend response status:", res.status);
+    console.log("[send-results] Resend response body:", JSON.stringify(data, null, 2));
+
     if (!res.ok) {
+      console.error("[send-results] Resend API error:", data.message || "Unknown Resend error");
       return new Response(JSON.stringify({ error: data.message || "Resend error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
     }
 
+    console.log("[send-results] Email accepted by Resend. ID:", data.id);
     return new Response(JSON.stringify({ success: true, id: data.id }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
+    console.error("[send-results] Exception during fetch:", err.message || err);
     return new Response(JSON.stringify({ error: err.message || "Unknown error" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
